@@ -3,6 +3,11 @@ require 'spec_helper'
 describe Sheet do
 
   let(:filename) { "#{File.dirname(__FILE__)}/data/Spec.xlsx" }
+  let(:tmp_path) { "#{File.dirname(__FILE__)}/../tmp" }
+
+  before :each do
+    FileUtils.rm_rf tmp_path if Dir.exists? tmp_path
+  end
 
   it 'Rows count' do
     Workbook.open filename do |w|
@@ -33,6 +38,25 @@ describe Sheet do
         s.rows[0].should eq [nil, 'en', 'es', 'pt', 'un']
         s.rows[1].should eq ['default', 30, 50, 15, 5]
       end
+    end
+  end
+
+  it 'Export to CSV' do
+    Workbook.open filename do |w|
+      csv_file = "#{tmp_path}/#{w.sheets[0].name}.csv"
+
+      File.should_not be_exists csv_file
+
+      w.sheets[0].to_csv tmp_path
+
+      csv = File.open(csv_file, 'r') { |f| f.readlines }
+      csv[0].should eq "\"LevenshteinDistance\",\"0.0\"\n"
+      csv[1].should eq "\"Case sensitive\",\"false\"\n"
+      csv[2].should eq "\"Fields\",\"Type\",\"URL Mining\"\n"
+      csv[3].should eq "\"autor\",\"text\",\"false\"\n"
+      csv[4].should eq "\"texto\",\"text\",\"false\"\n"
+      csv[5].should eq "\"url\",\"text\",\"false\"\n"
+      csv[6].should eq "\"comentario\",\"text\",\"false\"\n"
     end
   end
 

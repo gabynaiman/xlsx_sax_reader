@@ -42,18 +42,22 @@ describe Workbook do
     end
   end
 
+  it 'Export to CSV' do
+    Workbook.open filename do |w|
+      w.sheets.each { |s| s.should_receive(:to_csv).with(Dir.pwd) }
+      w.to_csv Dir.pwd
+    end
+  end
+
   it 'Large xlsx' do
     #require 'ruby-prof'
 
     #result = RubyProf.profile do
-      Workbook.open 'spec/data/SpecLarge.xlsx' do |w|
-        w.sheets.parallel(in_processes: 8).each do |s|
-          if s.name.start_with?('ont_')
-            puts s.name
-            s.rows
-          end
-        end
+    Workbook.open 'spec/data/SpecLarge.xlsx' do |w|
+      w.sheets.parallel(in_processes: 4).each do |s|
+        s.to_csv "#{File.dirname(__FILE__)}/../tmp"
       end
+    end
     #end
 
     #printer = RubyProf::GraphHtmlPrinter.new(result)

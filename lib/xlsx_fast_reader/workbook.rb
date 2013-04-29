@@ -32,5 +32,9 @@ module XlsxFastReader
       @shared_strings ||= SharedStringCollection.new(self).to_a
     end
 
+    def to_csv(path)
+      sheets.each { |s| s.to_csv path }
+    end
+
   end
 end
