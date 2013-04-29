@@ -1,17 +1,33 @@
 module XlsxFastReader
   class ColumnNameGenerator
 
-    LETTERS = ('A'..'ZZZ').to_a.freeze
+    FIRST = 'A'
+    LAST = 'Z'
 
-    def self.first
-      LETTERS.first
+    def self.next_to(previous)
+      cache previous do
+        parts = (previous || '').chars.to_a
+        char = parts.pop
+
+        if char.nil? || char.empty?
+          FIRST
+        elsif char < LAST
+          parts << (char.ord + 1).chr
+          parts.join
+        else
+          "#{next_to(parts.join)}A"
+        end
+      end
     end
 
-    def self.next_to(value)
-      return first if value.nil? || value.empty?
+    private
 
-      index = LETTERS.find_index(value)
-      LETTERS[index+1]
+    def self.cache(key, &block)
+      @cache ||= {}
+
+      return @cache[key] if @cache.has_key? key
+
+      @cache[key] = block.call
     end
 
   end

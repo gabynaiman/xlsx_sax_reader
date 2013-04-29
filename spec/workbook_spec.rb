@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Workbook do
 
-  let(:filename) { 'spec/data/Spec.xlsx' }
+  let(:filename) { "#{File.dirname(__FILE__)}/data/Spec.xlsx" }
 
   it 'Sheets count' do
     Workbook.open filename do |w|
@@ -43,18 +43,21 @@ describe Workbook do
   end
 
   it 'Large xlsx' do
-    require 'ruby-prof'
+    #require 'ruby-prof'
 
-    result = RubyProf.profile do
+    #result = RubyProf.profile do
       Workbook.open 'spec/data/SpecLarge.xlsx' do |w|
-        0.upto(0) do |i|
-          w.sheets[i].rows
+        w.sheets.parallel(in_processes: 8).each do |s|
+          if s.name.start_with?('ont_')
+            puts s.name
+            s.rows
+          end
         end
       end
-    end
+    #end
 
-    printer = RubyProf::CallStackPrinter.new(result)
-    printer.print(STDOUT, {})
+    #printer = RubyProf::GraphHtmlPrinter.new(result)
+    #File.open('profile.html', 'w') { |f| printer.print(f, {}) }
   end
 
 end

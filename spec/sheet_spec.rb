@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Sheet do
 
-  let(:filename) { 'spec/data/Spec.xlsx' }
+  let(:filename) { "#{File.dirname(__FILE__)}/data/Spec.xlsx" }
 
   it 'Rows count' do
     Workbook.open filename do |w|

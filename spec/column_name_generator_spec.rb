@@ -2,8 +2,12 @@ require 'spec_helper'
 
 describe ColumnNameGenerator do
 
-  it 'First' do
-    ColumnNameGenerator.first.should eq 'A'
+  it 'First char' do
+    ColumnNameGenerator::FIRST.should eq 'A'
+  end
+
+  it 'Last char' do
+    ColumnNameGenerator::LAST.should eq 'Z'
   end
 
   it 'Next value' do
