@@ -17,6 +17,8 @@ module XlsxSaxReader
         @current_row = []
         @next_column = 'A'
       end
+
+      @current_type = nil if name == :c
     end
 
     def end_element(name)

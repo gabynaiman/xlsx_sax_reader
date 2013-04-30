@@ -6,13 +6,13 @@ describe Workbook do
 
   it 'Sheets count' do
     Workbook.open filename do |w|
-      w.should have(4).sheets
+      w.should have(5).sheets
     end
   end
 
   it 'Sheet names' do
     Workbook.open filename do |w|
-      w.sheet_names.should eq %w(test_otros test_spec test_param Lenguajes)
+      w.sheet_names.should eq %w(test_otros test_spec test_param Lenguajes ont_demo)
     end
   end
 
@@ -22,6 +22,7 @@ describe Workbook do
       w.sheets[1].name.should eq 'test_spec'
       w.sheets[2].name.should eq 'test_param'
       w.sheets[3].name.should eq 'Lenguajes'
+      w.sheets[4].name.should eq 'ont_demo'
     end
   end
 
@@ -31,14 +32,15 @@ describe Workbook do
       w.sheets('test_spec').name.should eq 'test_spec'
       w.sheets('test_param').name.should eq 'test_param'
       w.sheets('Lenguajes').name.should eq 'Lenguajes'
+      w.sheets('ont_demo').name.should eq 'ont_demo'
     end
   end
 
   it 'Shared strings' do
     Workbook.open filename do |w|
-      w.should have(48).shared_strings
+      w.should have(56).shared_strings
       w.shared_strings[0].should eq 'LevenshteinDistance'
-      w.shared_strings[47].should eq 'default'
+      w.shared_strings[55].should eq 'TST_ModMan_Insulto_SU_Normal'
     end
   end
 

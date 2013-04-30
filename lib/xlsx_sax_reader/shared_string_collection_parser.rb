@@ -21,7 +21,7 @@ module XlsxSaxReader
     end
 
     def text(value)
-      @current_string << value if @current_string
+      @current_string << CGI.unescapeHTML(value) if @current_string
     end
 
   end

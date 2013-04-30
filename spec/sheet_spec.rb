@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'spec_helper'
 
 describe Sheet do
@@ -15,6 +16,7 @@ describe Sheet do
       w.sheets[1].should have(9).rows
       w.sheets[2].should have(3).rows
       w.sheets[3].should have(2).rows
+      w.sheets[4].should have(3).rows
     end
   end
 
@@ -37,6 +39,16 @@ describe Sheet do
       w.sheets[3].tap do |s|
         s.rows[0].should eq [nil, 'en', 'es', 'pt', 'un']
         s.rows[1].should eq ['default', 30, 50, 15, 5]
+      end
+    end
+  end
+
+  it 'Rows content with tag separators (>)' do
+    Workbook.open filename do |w|
+      w.sheets[4].tap do |s|
+        s.rows[0].should eq ['Especificacion', 'Concepto/RegExp/Pair', 'ClienteTexto_Campos', 'ClienteTexto_Especificacion']
+        s.rows[1].should eq ['Discriminación > Sexual | Insulto', 'puto', 'texto', 'TST_RechAuto_Insulto_SE_Normal']
+        s.rows[2].should eq ['Insulto', 'boludo', 'texto', 'TST_ModMan_Insulto_SU_Normal']
       end
     end
   end

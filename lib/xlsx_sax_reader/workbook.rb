@@ -32,8 +32,9 @@ module XlsxSaxReader
       @shared_strings ||= SharedStringCollection.new(self).to_a
     end
 
-    def to_csv(path)
-      sheets.each { |s| s.to_csv path }
+    def to_csv(path, parallel_options=nil)
+      enumerable = parallel_options ? sheets.parallel(parallel_options) : sheets
+      enumerable.each { |s| s.to_csv path }
     end
 
   end
