@@ -2,9 +2,12 @@ module XlsxSaxReader
   class Workbook
 
     def self.open(filename)
-      workbook = self.new(filename)
-      yield workbook
-      workbook.close
+      begin
+        workbook = self.new(filename)
+        yield workbook
+      ensure
+        workbook.close
+      end
     end
 
     def initialize(filename)
