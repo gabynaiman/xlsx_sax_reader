@@ -1,8 +1,8 @@
 module XlsxSaxReader
   class SharedStringCollectionParser < Ox::Sax
 
-    def self.parse(workbook, &block)
-      SaxParser.parse self.new(&block), workbook.read_file('xl/sharedStrings.xml')
+    def self.parse(file_system, &block)
+      SaxParser.parse self.new(&block), file_system.shared_strings
     end
 
     def initialize(&block)

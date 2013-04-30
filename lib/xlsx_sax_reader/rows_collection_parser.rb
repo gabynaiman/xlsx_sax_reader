@@ -1,12 +1,12 @@
 module XlsxSaxReader
   class RowsCollectionParser < Ox::Sax
 
-    def self.parse(workbook, index, &block)
-      SaxParser.parse self.new(workbook, &block), workbook.read_file("xl/worksheets/sheet#{index}.xml")
+    def self.parse(index, file_system, shared_strings, &block)
+      SaxParser.parse self.new(shared_strings, &block), file_system.sheets[index]
     end
 
-    def initialize(workbook, &block)
-      @workbook = workbook
+    def initialize(shared_strings, &block)
+      @shared_strings = shared_strings
       @block = block
     end
 
@@ -51,7 +51,7 @@ module XlsxSaxReader
     def value_of(text)
       case @current_type
         when 's'
-          @workbook.shared_strings[text.to_i]
+          @shared_strings[text.to_i]
         when 'b'
           BooleanParser.parse text
         when 'n'

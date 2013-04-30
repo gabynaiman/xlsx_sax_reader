@@ -11,19 +11,15 @@ module XlsxSaxReader
     end
 
     def initialize(filename)
-      @zip = Zip::ZipFile.open filename
+      @file_system = FileSystem.new filename
     end
 
     def close
-      @zip.close
-    end
-
-    def read_file(filename)
-      @zip.read filename
+      @file_system.close
     end
 
     def sheets(name=nil)
-      @sheets ||= SheetCollection.new(self).to_a
+      @sheets ||= SheetCollection.new(@file_system, shared_strings).to_a
       name.nil? ? @sheets : @sheets.detect { |s| s.name == name }
     end
 
@@ -32,7 +28,7 @@ module XlsxSaxReader
     end
 
     def shared_strings
-      @shared_strings ||= SharedStringCollection.new(self).to_a
+      @shared_strings ||= SharedStringCollection.new(@file_system).to_a
     end
 
     def to_csv(path, parallel_options=nil)

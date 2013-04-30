@@ -3,13 +3,14 @@ module XlsxSaxReader
 
     include Enumerable
 
-    def initialize(workbook, index)
-      @workbook = workbook
+    def initialize(index, file_system, shared_strings)
       @index = index
+      @file_system = file_system
+      @shared_strings = shared_strings
     end
 
     def each(&block)
-      RowsCollectionParser.parse @workbook, @index, &block
+      RowsCollectionParser.parse @index, @file_system, @shared_strings, &block
     end
 
   end
